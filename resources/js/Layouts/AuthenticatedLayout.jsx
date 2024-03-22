@@ -9,6 +9,36 @@ export default function Authenticated({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+    // const menu = (role) => {
+    //     if (role === "admin") {
+    //         return [
+    //             {
+    //                 name: "Dashboard",
+    //                 href: route("dashboard"),
+    //                 current: route().current("dashboard"),
+    //             },
+    //             {
+    //                 name: "Users",
+    //                 href: route("users"),
+    //                 current: route().current("users"),
+    //             },
+    //             {
+    //                 name: "Absensi",
+    //                 href: route("dashboard"),
+    //                 current: route().current("dashboard"),
+    //             },
+    //         ];
+    //     } else {
+    //         return [
+    //             {
+    //                 name: "Dashboard",
+    //                 href: route("dashboard"),
+    //                 current: route().current("dashboard"),
+    //             },
+    //         ];
+    //     }
+    // };
+
     const menu = [
         {
             name: "Dashboard",
@@ -17,8 +47,8 @@ export default function Authenticated({ user, header, children }) {
         },
         {
             name: "Users",
-            href: route("dashboard"),
-            current: route().current("dashboard"),
+            href: route("users"),
+            current: route().current("users"),
         },
         {
             name: "Absensi",
