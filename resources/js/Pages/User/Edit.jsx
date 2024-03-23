@@ -8,23 +8,23 @@ import { Transition } from "@headlessui/react";
 import SelectBox from "@/Components/SelectBox";
 import roles from "@/data/roles.json";
 
-export default function UserCreate({ auth }) {
-    const { data, setData, post, errors, processing, recentlySuccessful } =
+export default function UserEdit({ auth, user }) {
+    const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
-            name: "",
-            email: "",
+            name: user.name,
+            email: user.email,
             password: "",
             password_confirmation: "",
-            role: "user",
+            role: user.role,
         });
 
     const submit = (e) => {
         e.preventDefault();
 
-        post(route("users.store"), {
+        patch(route("users.update", user.id), {
             preserveScroll: true,
             onSuccess: () => {
-                alert("User Sucess Created");
+                alert("User Sucess Updated!");
             },
             onError: (errors) => {
                 console.log("errors");
@@ -52,7 +52,7 @@ export default function UserCreate({ auth }) {
                                         <section className="max-w-xl">
                                             <header>
                                                 <h2 className="text-lg font-medium text-gray-900">
-                                                    Profile Information
+                                                    Edit User
                                                 </h2>
 
                                                 <p className="mt-1 text-sm text-gray-600">
@@ -134,7 +134,7 @@ export default function UserCreate({ auth }) {
                                                             );
                                                         }}
                                                         id="role"
-                                                        currentValue="user"
+                                                        currentValue={data.role}
                                                         options={roles}
                                                         className="mt-1 block w-full"
                                                     />
