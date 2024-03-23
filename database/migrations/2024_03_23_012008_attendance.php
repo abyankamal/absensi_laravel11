@@ -12,6 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         //
+        Schema::create('attendances', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->foreignId('user_id')->constrained('users');
+            $table->string('latitude', 20);
+            $table->string('longitude', 20);
+            $table->string('address', 500);
+            $table->enum('status', ['attend', 'sick', 'leave', 'permit', 'business_trip', 'remote']);
+            $table->string('description', 500)->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
