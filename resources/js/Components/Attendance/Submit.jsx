@@ -6,7 +6,6 @@ import TextInput from "@/Components/TextInput";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 import SelectBox from "@/Components/SelectBox";
-import roles from "@/data/roles.json";
 import { useEffect, useState } from "react";
 
 export default function SubmitAttendance({ auth }) {
