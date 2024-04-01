@@ -18,10 +18,10 @@ export default function SubmitAttendance({ auth }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route("users.store"), {
+        post(route("attendances.submit"), {
             preserveScroll: true,
             onSuccess: () => {
-                alert("User Sucess Created");
+                alert("Absensi Berhasil Disubmit");
             },
             onError: (errors) => {
                 console.log("errors");
