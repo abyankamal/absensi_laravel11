@@ -7,27 +7,90 @@ import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
 import SelectBox from "@/Components/SelectBox";
 import { useEffect, useState } from "react";
+import { Loader } from "@googlemaps/js-api-loader";
 
 export default function SubmitAttendance({ auth }) {
+    const loader = new Loader({
+        apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+        version: "weekly",
+        libraries: ["geocoder"],
+    });
     const [transitioning, setTransitioning] = useState(false);
-    const { data, setData, post, errors, processing } = useForm({
+    const {
+        data,
+        setData,
+        post,
+        errors,
+        processing,
+        transform,
+        recentlySuccessful,
+        prepareData,
+    } = useForm({
         status: "attend",
         description: "",
+        latitude: "",
+        longitude: "",
+        address: "",
+        prepareData: {},
     });
 
-    const submit = (e) => {
-        e.preventDefault();
-
-        post(route("attendances.submit"), {
-            preserveScroll: true,
-            onSuccess: () => {
-                alert("Absensi Berhasil Disubmit");
+    const getLatLing = () => {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                createGeocoder(position.coords);
             },
-            onError: (errors) => {
-                console.log("errors");
-            },
-        });
+            function (error) {
+                console.error(error);
+            }
+        );
     };
+
+    function createGeocoder(coordinates) {
+        loader.load().then(() => {
+            const geocoder = new google.maps.Geocoder();
+            geocoder
+                .geocode({
+                    location: {
+                        lat: coordinates.latitude,
+                        lng: coordinates.longitude,
+                    },
+                })
+                .then((response) => {
+                    console.log(response.results[0].formatted_address);
+                    if (!response.results[0]) {
+                        alert("Tidak Bisa Mendapatkan Lokasi");
+                    }
+                    setData("prepareData", {
+                        latitude: coordinates.latitude,
+                        longitude: coordinates.longitude,
+                        address: response.results[0].formatted_address,
+                    });
+                });
+        });
+    }
+
+    useEffect(() => {
+        if (
+            data.prepareData.hasOwnProperty("address") &&
+            data.prepareData.hasOwnProperty("longitude")
+        ) {
+            transform((data) => ({
+                ...data.prepareData,
+                status: data.status,
+                description: data.description,
+            }));
+
+            post(route("attendances.submit"), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    alert("Absensi Berhasil Disubmit");
+                },
+                onError: (errors) => {
+                    console.log("errors");
+                },
+            });
+        }
+    }, [data.prepareData]);
 
     useEffect(() => {
         if (data.status === "attend") {
@@ -37,7 +100,7 @@ export default function SubmitAttendance({ auth }) {
         }
     }, [data.status]);
     return (
-        <form onSubmit={submit} className="mt-6 space-y-6">
+        <form onSubmit={getLatLing} className="mt-6 space-y-6">
             <div>
                 <InputLabel htmlFor="Info" value="SIlahkan Lakukan Absensi" />
 
