@@ -9,7 +9,7 @@ import SelectBox from "@/Components/SelectBox";
 import { useEffect, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 
-export default function SubmitAttendance({ auth }) {
+export default function SubmitAttendance({ auth, submitted }) {
     const loader = new Loader({
         apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
         version: "weekly",
