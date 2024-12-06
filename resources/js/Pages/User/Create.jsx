@@ -27,7 +27,7 @@ export default function UserCreate({ auth }) {
                 alert("User Sucess Created");
             },
             onError: (errors) => {
-                console.log("errors");
+                console.log(errors);
             },
         });
     };
